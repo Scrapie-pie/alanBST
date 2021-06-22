@@ -8,6 +8,28 @@
 }
 
 
+.binary-tree {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    /*position: absolute;*/
+}
+
+.binary-tree__node {
+    width: 20px;
+    height: 20px;
+    border: 1px solid black;
+    border-radius: 50px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: show-ease-in 1s;
+    position: relative;
+}
+
 @keyframes show {
     from {
         opacity: 0;
