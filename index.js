@@ -14,31 +14,34 @@ class Node {
 	static createNodeDom(value) {
 		let node = createEl('div', 'binary-tree__node');
 		node.append(createEl('div', 'binary-tree__node-value', value));
-		node.append(createEl('div', 'binary-tree__node-container'));
 		return node;
 	}
 
-	static insert(node, newNode, direct) {
-		if (newNode.value > node.value) {
+	static highlightEqual(node) {
+		node.dom.classList.add('highlight')
+	}
+
+	static insert(node, newNode) {
+		if (newNode.value === node.value) {
+			Node.highlightEqual(node)
+			return;
+		} else if (newNode.value > node.value) {
 			if (node.right) {
 				newNode.level++;
-				return this.insert(node.right, newNode, 'right')
+				return this.insert(node.right, newNode)
 			} else {
 				node.right = newNode
 			}
 		} else if (newNode.value < node.value) {
 			if (node.left) {
-				newNode.level++;
-				return this.insert(node.left, newNode, 'left')
+				newNode.level ++;
+				return this.insert(node.left, newNode)
 			} else {
 				node.left = newNode
 			}
-		} else {
-			//node scale(.1)
 		}
 		newNode.root = node;
-
-		return { node, direct }
+		return node
 	}
 }
 
@@ -67,9 +70,25 @@ document.addEventListener('keyup', event => {
 			tree.append(rootNode.dom);
 		} else {
 			let newNode = new Node;
-			let { node:foundRootNode, direct } = Node.insert(rootNode, newNode);
-			let container = foundRootNode.dom.querySelector('.binary-tree__node-container');
-			container.append(newNode.dom);
+			let foundRootNode = Node.insert(rootNode, newNode);
+
+			if (foundRootNode) {
+				let container = createEl('div', 'binary-tree__node-container');
+				foundRootNode.dom.append(container);
+				container.append(newNode.dom);
+
+				let direct;
+				//let indent = `${-30 * (12/newNode.level)}px`;
+
+				if (foundRootNode.right === newNode) {
+					direct = 'right';
+				} else if (foundRootNode.left === newNode) {
+					direct = 'left'
+				}
+
+				container.style[direct] = `${-30 * (12/newNode.level)}px`;
+				container.style.bottom = `-${newNode.level * 5 + 10}px`;
+			}
 		}
 	}
 });

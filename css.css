@@ -33,6 +33,10 @@
     position: absolute;
 }
 
+.highlight {
+    background-color: green;
+}
+
 @keyframes show {
     from {
         opacity: 0;
@@ -41,3 +45,4 @@
         opacity: 1;
     }
 }
+
