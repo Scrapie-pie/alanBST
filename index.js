@@ -7,8 +7,15 @@ class Node {
 		this.left = null;
 		this.right = null;
 		this.root = null;
-		this.getDom = createEl('div', 'binary-tree__node', this.value);
+		this.dom = Node.createNodeDom(this.value);
 		this.level = 1;
+	}
+
+	static createNodeDom(value) {
+		let node = createEl('div', 'binary-tree__node');
+		node.append(createEl('div', 'binary-tree__node-value', value));
+		node.append(createEl('div', 'binary-tree__node-container'));
+		return node;
 	}
 
 	static insert(node, newNode, direct) {
@@ -45,7 +52,7 @@ function getRandom(min, max) {
 
 function createEl(tag, addClass, text) {
 	let el = document.createElement(tag);
-	if (addClass) el.classList.add(addClass)
+	if (addClass) el.classList.add(addClass);
 	if (text) el.textContent = text;
 	return el;
 }
@@ -57,12 +64,12 @@ document.addEventListener('keyup', event => {
 	if (event.code === 'Space') {
 		if (!rootNode) {
 			rootNode = new Node();
-			tree.append(rootNode.getDom);
+			tree.append(rootNode.dom);
 		} else {
-			const newNode = new Node;
-			let { foundRootNode, direct } = Node.insert(rootNode, newNode)
-
-			console.log(rootNode)
+			let newNode = new Node;
+			let { node:foundRootNode, direct } = Node.insert(rootNode, newNode);
+			let container = foundRootNode.dom.querySelector('.binary-tree__node-container');
+			container.append(newNode.dom);
 		}
 	}
 });
