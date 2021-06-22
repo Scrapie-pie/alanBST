@@ -7,18 +7,48 @@ class Node {
 		this.left = null;
 		this.right = null;
 		this.root = null;
-		this.dom = Node.createNodeDom(this.value);
+		this.dom = Node.createNodeDom(this, this.value);
 		this.level = 1;
 	}
 
-	static createNodeDom(value) {
-		let node = createEl('div', 'binary-tree__node');
-		node.append(createEl('div', 'binary-tree__node-value', value));
-		return node;
+	static createNodeDom(node, value) {
+		let domEl = createEl('div', 'binary-tree__node');
+		domEl.append(createEl('div', 'binary-tree__node-value', value));
+		domEl.addEventListener('click', function (e){
+			e.stopPropagation();
+			this.style.opacity = '0';
+			if (node.root.left === node) {
+				node.root.left = null
+			} else {
+				node.root.right = null
+			}
+			setTimeout(() => {
+				this.remove()
+			}, 500);
+		});
+		domEl.addEventListener('mouseover', function (e){
+			e.stopPropagation();
+			this.classList.add('remove')
+			this.querySelectorAll('.binary-tree__node').forEach(child => {
+				child.classList.add('remove')
+			})
+		});
+		domEl.addEventListener('mouseout', function (e){
+			e.stopPropagation();
+			this.classList.remove('remove')
+			this.querySelectorAll('.binary-tree__node').forEach(child => {
+				child.classList.remove('remove')
+			})
+		});
+		return domEl;
 	}
 
 	static highlightEqual(node) {
 		node.dom.classList.add('highlight')
+	}
+
+	static highlightRemove(node) {
+		node.dom.classList.add('remove')
 	}
 
 	static insert(node, newNode) {
@@ -67,6 +97,7 @@ document.addEventListener('keyup', event => {
 	if (event.code === 'Space') {
 		if (!rootNode) {
 			rootNode = new Node();
+			rootNode.dom.addEventListener('click', () => rootNode = null);
 			tree.append(rootNode.dom);
 		} else {
 			let newNode = new Node;
@@ -86,7 +117,8 @@ document.addEventListener('keyup', event => {
 					direct = 'left'
 				}
 
-				container.style[direct] = `${-30 * (12/newNode.level)}px`;
+				let space = 300 / newNode.level;
+				container.style[direct] = `-${space}px`;
 				container.style.bottom = `-${newNode.level * 5 + 10}px`;
 			}
 		}
