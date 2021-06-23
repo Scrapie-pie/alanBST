@@ -42,15 +42,11 @@ html, body, main {
 }
 
 .highlight {
-    background-color: green;
+    background-color: turquoise;
 }
 
 .remove {
-    background-color: red;
-}
-
-.equal {
-    animation: highlight .5s both;
+    background-color: red !important;
 }
 
 @keyframes show {
@@ -59,18 +55,6 @@ html, body, main {
     }
     to {
         opacity: 1;
-    }
-}
-
-@keyframes highlight {
-    0% {
-        background-color: white;
-    }
-    50% {
-        background-color: aqua;
-    }
-    100% {
-        background-color: white;
     }
 }
 
